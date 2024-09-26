@@ -1,7 +1,7 @@
 # Importing Pillow (image library)
 from PIL import Image, ImageEnhance
    
-def main():
+def main(new_width = 150):
     #
     # Receiving user input
     #
@@ -32,13 +32,15 @@ def main():
     #
     # Converting image to ASCII art
     #
-    image_to_ascii(resized_grayscale)
     
-    # ASCII Chars from darkest to lightest: $@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`'.
+    # Receives the ASCII art as one line
+    line_image = image_to_ascii(resized_grayscale)
+    for i in range(0, len(line_image), new_width):
+        print(line_image[i:i+new_width])
     
 def resize(image, new_width = 150):
     width, height = image.size
-    ratio = height / width
+    ratio = height / width / 1.65
     
     new_height = int(ratio * new_width)
     resized_image = image.resize((new_width, new_height))
@@ -46,35 +48,14 @@ def resize(image, new_width = 150):
     return resized_image
 
 def image_to_ascii(image):
-    ascii_chars = ['@', '#', 'S', '%', '?', '*', '+', ';', ':', '.']
-    pixels = image.load()
-    print(pixels)
-    
-    for y in range(image.size[1]):
-        for x in range(image.size[0]):
-            brightness = pixels[x, y]
-            
-            if brightness <= 255 and brightness > 230:
-                print('@', end = "")
-            elif brightness <= 230 and brightness > 205:
-                print('#', end = "")
-            elif brightness <= 205 and brightness > 180:
-                print('S', end = "")
-            elif brightness <= 180 and brightness > 155:
-                print('%', end = "")
-            elif brightness <= 155 and brightness > 130:
-                print('?', end = "")
-            elif brightness <= 130 and brightness > 105:
-                print('*', end = "")
-            elif brightness <= 105 and brightness > 80:
-                print('+', end = "")
-            elif brightness <= 80 and brightness > 55:
-                print(';', end = "")
-            elif brightness <= 55 and brightness > 30:
-                print(':', end = "")
-            else:
-                print('.', end = "")
+    ascii_chars = ['@', '#', '%', '*', '+', '-', '.', ' ', '`', '"']
 
-        print("\n")
+    pixels = image.getdata()
+    
+    characters = []
+    for pixel in pixels:
+        characters.append(ascii_chars[pixel // 26])
+        
+    return "".join(characters)
             
 main()
