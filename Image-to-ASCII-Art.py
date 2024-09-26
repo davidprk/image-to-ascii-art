@@ -28,15 +28,15 @@ def main():
 
     # Creating enhancer for given image
     resized_grayscale = resized_image.convert("L")
-    resized_grayscale.show()
 
     #
     # Converting image to ASCII art
     #
-
+    image_to_ascii(resized_grayscale)
+    
     # ASCII Chars from darkest to lightest: $@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`'.
     
-def resize(image, new_width = 300):
+def resize(image, new_width = 150):
     width, height = image.size
     ratio = height / width
     
@@ -45,4 +45,36 @@ def resize(image, new_width = 300):
     
     return resized_image
 
+def image_to_ascii(image):
+    ascii_chars = ['@', '#', 'S', '%', '?', '*', '+', ';', ':', '.']
+    pixels = image.load()
+    print(pixels)
+    
+    for y in range(image.size[1]):
+        for x in range(image.size[0]):
+            brightness = pixels[x, y]
+            
+            if brightness <= 255 and brightness > 230:
+                print('@', end = "")
+            elif brightness <= 230 and brightness > 205:
+                print('#', end = "")
+            elif brightness <= 205 and brightness > 180:
+                print('S', end = "")
+            elif brightness <= 180 and brightness > 155:
+                print('%', end = "")
+            elif brightness <= 155 and brightness > 130:
+                print('?', end = "")
+            elif brightness <= 130 and brightness > 105:
+                print('*', end = "")
+            elif brightness <= 105 and brightness > 80:
+                print('+', end = "")
+            elif brightness <= 80 and brightness > 55:
+                print(';', end = "")
+            elif brightness <= 55 and brightness > 30:
+                print(':', end = "")
+            else:
+                print('.', end = "")
+
+        print("\n")
+            
 main()
